@@ -7,9 +7,9 @@ RUN apt-get update && \
     apt-get clean
 
 # Install Rust and Cargo
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup.sh && \
-    sh rustup.sh -y --no-modify-path && \
-    $HOME/.cargo/env
+RUN apt-get update && \
+    apt-get install -y rustc cargo && \
+    apt-get clean
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
