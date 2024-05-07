@@ -1,10 +1,14 @@
 # Use the official Python image as a base image
 FROM python:3.9-slim
 
-# Install Rust and Cargo
+# Install dependencies
 RUN apt-get update && \
     apt-get install -y curl && \
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y && \
+    apt-get clean
+
+# Install Rust and Cargo
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs -o rustup.sh && \
+    sh rustup.sh -y --no-modify-path && \
     $HOME/.cargo/env
 
 # Set environment variables
