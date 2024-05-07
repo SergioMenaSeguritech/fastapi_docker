@@ -1,5 +1,5 @@
-# Use the official Python image as a base image
-FROM python:3.9-slim
+# Use an ARM-compatible base image
+FROM arm32v6/python:3.9-slim
 
 # Install dependencies
 RUN apt-get update && \
@@ -8,8 +8,16 @@ RUN apt-get update && \
 
 # Install Rust and Cargo
 RUN apt-get update && \
-    apt-get install -y rustc cargo && \
-    apt-get clean
+    apt-get install -y --no-install-recommends \
+    build-essential \
+    curl \
+    ca-certificates \
+    && curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly && \
+    $HOME/.cargo/bin/rustup target add armv6-unknown-linux-gnueabihf && \
+    apt-get remove -y build-essential && \
+    apt-get autoremove -y && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
