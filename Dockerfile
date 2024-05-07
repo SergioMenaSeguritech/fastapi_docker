@@ -3,7 +3,7 @@ FROM arm32v6/alpine:latest
 
 # Install dependencies
 RUN apk update && \
-    apk add --no-cache python3 python3-dev py3-pip build-base
+    apk add --no-cache python3 python3-dev py3-pip build-base cargo
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
