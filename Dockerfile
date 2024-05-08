@@ -1,11 +1,10 @@
-# Use Alpine Linux as a base image
-FROM python:3.9-slim
+# Use the official Python image for ARMv6 as a base image
+FROM arm32v6/python:3.9-slim
 
 # Install dependencies
 RUN apt-get update && \
-    apt-get install -y curl rustc cargo && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    apt-get install -y curl && \
+    apt-get clean
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
