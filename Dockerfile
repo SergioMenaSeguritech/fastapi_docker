@@ -1,26 +1,30 @@
-# Usa la imagen base de Debian optimizada para ARM
-FROM arm32v7/debian:bullseye-slim
+# Use the official Python image as a base image
+FROM python:3.9-slim
 
-# Actualiza el índice de paquetes y luego instala curl y gnupg
+# Install dependencies
 RUN apt-get update && \
-    apt-get install -y curl gnupg && \
-    apt-get clean
+    apt-get install -y \
+        curl \
+        rustc \
+        cargo && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
-# Instalar las dependencias de Python
-RUN apt-get install -y python3 python3-pip
-
-# Instalar las dependencias de Python
-RUN pip install --no-cache-dir fastapi uvicorn
-
-# Establecer las variables de entorno
+# Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 
-# Establecer el directorio de trabajo en el contenedor
+# Set the working directory in the container
 WORKDIR /app
 
-# Copiar el código fuente al contenedor
+# Copy the dependencies file to the working directory
+COPY requirements.txt .
+
+# Install Python dependencies
+RUN pip install -r requirements.txt
+
+# Copy the content of the local src directory to the working directory
 COPY . .
 
-# Comando para ejecutar al iniciar el contenedor
+# Command to run on container start
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
