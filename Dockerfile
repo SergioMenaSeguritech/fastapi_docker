@@ -1,10 +1,10 @@
-# Use the official Python image for ARMv6 as a base image
+# Usa la imagen base de Debian optimizada para ARM
 FROM arm32v7/debian:bullseye-slim
 
-# Instalar Rust y Cargo
-RUN apt-get update && apt-get install -y curl gnupg
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-ENV PATH="/root/.cargo/bin:${PATH}"
+# Actualiza el índice de paquetes y luego instala curl y gnupg
+RUN apt-get update && \
+    apt-get install -y curl gnupg && \
+    apt-get clean
 
 # Instalar las dependencias de Python
 RUN apt-get install -y python3 python3-pip
