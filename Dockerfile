@@ -1,5 +1,5 @@
 # Use the official Python image for ARMv6 as a base image
-FROM arm32v6/debian:bullseye-slim
+FROM arm32v7/debian:bullseye-slim
 
 # Install dependencies
 RUN apt-get update \
