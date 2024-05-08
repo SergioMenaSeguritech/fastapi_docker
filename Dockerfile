@@ -1,12 +1,13 @@
-# Use the official Python image as a base image
-FROM python:3.9-slim
+# Use an ARM-compatible base image with Python
+FROM arm32v7/python:3.9-slim
 
 # Install dependencies
 RUN apt-get update && \
     apt-get install -y \
         curl \
-        rustc \
-        cargo && \
+        build-essential \
+        libssl-dev \
+        && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
 
