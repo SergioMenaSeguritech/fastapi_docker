@@ -1,10 +1,10 @@
 # Use the official Python image for ARMv6 as a base image
-FROM arm32v7/python:3.9-slim-bullseye
+FROM arm32v6/debian:bullseye-slim
 
 # Install dependencies
-RUN apt-get update && \
-    apt-get install -y curl && \
-    apt-get clean
+RUN apt-get update \
+    && apt-get install -y curl \
+    && apt-get clean
 
 # Set environment variables
 ENV PYTHONDONTWRITEBYTECODE 1
