@@ -1,7 +1,8 @@
-version: '3.8'
+version: '3'
+
 services:
   fastapi:
     build: 
       context: .
     ports:
-      - "8000:8000"
+      - "80:80"

@@ -1,26 +1,23 @@
-# Use the official Python image for ARMv6 as a base image
-FROM arm32v7/debian:bullseye-slim
+# Utiliza la imagen oficial de Python como imagen base
+FROM python:3.9-slim
 
-# Install dependencies
-RUN apt-get update \
-    && apt-get install -y curl \
-    && apt-get clean
+# Instala FastAPI y Uvicorn
+RUN pip install fastapi uvicorn
 
-# Set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-
-# Set the working directory in the container
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
-# Copy the dependencies file to the working directory
+# Copia el archivo requirements.txt al contenedor
 COPY requirements.txt .
 
-# Install Python dependencies
-RUN pip install --no-cache-dir -r requirements.txt
+# Instala las dependencias desde requirements.txt
+RUN pip install -r requirements.txt
 
-# Copy the content of the local src directory to the working directory
-COPY . .
+# Copia el código de la aplicación al contenedor
+COPY ./app /app
 
-# Command to run on container start
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Expone el puerto 80
+EXPOSE 80
+
+# Comando para ejecutar la aplicación con Uvicorn
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "80"]
