@@ -1,5 +1,5 @@
 # Use the official Python image for ARMv6 as a base image
-FROM arm32v6/python:3.9-slim
+FROM arm32v7/python:3.9-slim-bullseye
 
 # Install dependencies
 RUN apt-get update && \
