@@ -1,20 +1,15 @@
-# Usa la imagen base de Alpine Linux para ARM v6
-FROM arm32v6/python:3.11-alpine
+# Usa la imagen base de Python para ARM
+FROM --platform=linux/arm/v6 python:3.9-slim
 
-# Instala bash y otras dependencias
-RUN apk add --no-cache \
-    bash \
+# Instala las dependencias necesarias para Rust
+RUN apt-get update && apt-get install -y \
+    build-essential \
     curl \
-    openssl-dev \
-    libffi-dev \
-    build-base \
-    python3-dev \
-    py3-pip
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Descarga e instala Rust
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
-    && source $HOME/.cargo/env \
-    && rustup default stable
+# Instala Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # Configura el PATH para Cargo
 ENV PATH="/root/.cargo/bin:${PATH}"
@@ -26,7 +21,7 @@ WORKDIR /app
 COPY . /app
 
 # Instala las dependencias de Python
-RUN pip3 install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 8000
