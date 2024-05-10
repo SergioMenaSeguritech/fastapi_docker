@@ -1,12 +1,16 @@
 version: '3'
-
 services:
   fastapi:
     container_name: fastapi
-    image: fastapi
-    build: 
+    build:
       context: .
+      dockerfile: Dockerfile
+      args:
+        - TARGETARCH=arm
     ports:
       - "8000:8000"
     environment:
       DOCKER_BUILDKIT: 1
+      PYTHONUNBUFFERED: 1
+    volumes:
+      - .:/app
