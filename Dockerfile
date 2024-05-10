@@ -2,15 +2,12 @@
 FROM arm32v6/python:3.11-alpine
 
 # Instala las dependencias necesarias
-RUN apt-get update && \
-    apt-get install -y \
+RUN apk add --no-cache \
         curl \
-        build-essential \
-        libssl-dev \
+        build-base \
+        openssl-dev \
         libffi-dev \
         && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/* && \
     curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
 # Agrega Rust al PATH
