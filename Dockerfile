@@ -1,12 +1,17 @@
-# Usa la imagen base de Python para ARM
-FROM --platform=linux/arm/v6 python:3.9-slim
+# Usa la imagen base de Debian para ARM
+FROM --platform=linux/arm/v6 debian:buster-slim
 
-# Instala las dependencias necesarias para Rust
-RUN apt-get update && apt-get install -y \
+# Instala Python 3.9 y otras dependencias
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    python3.9 \
+    python3-pip \
     build-essential \
     curl \
     libssl-dev \
     && rm -rf /var/lib/apt/lists/*
+
+# Configura Python 3.9 como predeterminado
+RUN ln -s /usr/bin/python3.9 /usr/bin/python
 
 # Instala Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
