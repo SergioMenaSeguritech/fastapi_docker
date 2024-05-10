@@ -7,11 +7,8 @@ RUN apk add --no-cache \
         build-base \
         openssl-dev \
         libffi-dev \
-        && \
-    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-# Agrega Rust al PATH
-ENV PATH="/root/.cargo/bin:${PATH}"
+        rust \
+        cargo
 
 # Establece las variables de entorno necesarias
 ENV PYTHONDONTWRITEBYTECODE 1
