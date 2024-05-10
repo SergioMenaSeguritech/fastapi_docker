@@ -1,26 +1,25 @@
 # Usa una imagen base compatible con la arquitectura de Raspberry Pi 1 (armv6)
-FROM arm32v7/python:3.11.9-slim-bookworm
+FROM arm32v6/python:3.11-alpine
 
 # Instala las dependencias necesarias
-# Instala Rust y Cargo desde la imagen arm32v7/rust
 RUN apt-get update && \
     apt-get install -y \
         curl \
         build-essential \
         libssl-dev \
         libffi-dev \
-        cargo \
         && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/*
+    rm -rf /var/lib/apt/lists/* && \
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
+# Agrega Rust al PATH
+ENV PATH="/root/.cargo/bin:${PATH}"
 
 # Establece las variables de entorno necesarias
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
 ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
-
-
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
