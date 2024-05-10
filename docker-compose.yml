@@ -8,3 +8,5 @@ services:
       context: .
     ports:
       - "8000:8000"
+    environment:
+      DOCKER_BUILDKIT: 1
