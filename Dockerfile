@@ -1,8 +1,9 @@
 # Usa la imagen base de Alpine Linux para ARM v6
 FROM arm32v6/alpine:3.14
 
-# Instala Python 3.9 y otras dependencias
+# Instala bash y otras dependencias
 RUN apk add --no-cache \
+    bash \
     python3 \
     py3-pip \
     build-base \
