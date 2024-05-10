@@ -1,31 +1,30 @@
-# Usa una imagen base compatible con la arquitectura de Raspberry Pi 1 (armv6)
-FROM arm32v6/python:3.11-alpine
+# Usa la imagen base de Python para ARM
+FROM --platform=linux/arm/v6 python:3.9-slim
 
-# Instala las dependencias necesarias
-RUN apk add --no-cache \
-        curl \
-        build-base \
-        openssl-dev \
-        libffi-dev \
-        rust \
-        cargo
+# Instala las dependencias necesarias para Rust
+RUN apt-get update && apt-get install -y \
+    build-essential \
+    curl \
+    libssl-dev \
+    && rm -rf /var/lib/apt/lists/*
 
-# Establece las variables de entorno necesarias
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
-ENV CRYPTOGRAPHY_DONT_BUILD_RUST=1
+# Instala Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 
-# Establece el directorio de trabajo en el contenedor
+# Configura el PATH para Cargo
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Crea el directorio de la aplicación
 WORKDIR /app
 
-# Copia el archivo de dependencias al directorio de trabajo
-COPY requirements.txt .
+# Copia los archivos de la aplicación al contenedor
+COPY . /app
 
 # Instala las dependencias de Python
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copia el contenido del directorio fuente local al directorio de trabajo
-COPY . .
+# Expone el puerto en el que se ejecutará la aplicación
+EXPOSE 8000
 
-# Comando para ejecutar al iniciar el contenedor
+# Comando para iniciar la aplicación FastAPI
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
