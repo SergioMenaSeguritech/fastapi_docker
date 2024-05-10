@@ -1,17 +1,20 @@
 # Usa la imagen base de Alpine Linux para ARM v6
-FROM arm32v6/alpine:3.14
+FROM arm32v6/python:3.11-alpine
 
 # Instala bash y otras dependencias
 RUN apk add --no-cache \
     bash \
-    python3 \
-    py3-pip \
-    build-base \
     curl \
-    openssl-dev
+    openssl-dev \
+    libffi-dev \
+    build-base \
+    python3-dev \
+    py3-pip
 
-# Instala Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Descarga e instala Rust
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y \
+    && source $HOME/.cargo/env \
+    && rustup default stable
 
 # Configura el PATH para Cargo
 ENV PATH="/root/.cargo/bin:${PATH}"
