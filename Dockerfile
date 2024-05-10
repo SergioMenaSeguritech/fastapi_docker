@@ -1,30 +1,28 @@
-# Usa la imagen base de Python para ARM
-FROM --platform=linux/arm/v6 python:3.9-slim
+# Etapa 1: Instalación de Rust
+FROM mdirkse/rust_armv6:latest as rust_builder
 
-# Instala las dependencias necesarias para Rust
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Instala Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-
-# Configura el PATH para Cargo
-ENV PATH="/root/.cargo/bin:${PATH}"
-
-# Crea el directorio de la aplicación
+# Establece el directorio de trabajo en el contenedor
 WORKDIR /app
 
 # Copia los archivos de la aplicación al contenedor
 COPY . /app
 
-# Instala las dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
+# Instala las dependencias de Rust si es necesario
+# Ejemplo:
+# RUN cargo build --release
 
-# Expone el puerto en el que se ejecutará la aplicación
-EXPOSE 8000
+# Etapa 2: Instalación de Python
+FROM arm32v6/python:3.11-alpine
 
-# Comando para iniciar la aplicación FastAPI
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Copia los archivos de la etapa anterior
+COPY --from=rust_builder /app /app
+
+# Instala las dependencias de Python si es necesario
+# Ejemplo:
+# RUN pip install --no-cache-dir -r requirements.txt
+
+# Establece el directorio de trabajo en el contenedor
+WORKDIR /app
+
+# Comando para iniciar la aplicación
+CMD ["python", "app.py"]
