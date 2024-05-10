@@ -1,5 +1,5 @@
-# Usa la imagen base de Debian para ARM
-FROM --platform=linux/arm/v6 debian:buster-slim
+# Usa la imagen base de Raspberry Pi OS
+FROM --platform=linux/arm/v6 raspbian/raspbian:buster
 
 # Instala Python 3.9 y otras dependencias
 RUN apt-get update && apt-get install -y --no-install-recommends \
