@@ -19,7 +19,7 @@ COPY --from=rust_builder /app /app
 
 # Instala las dependencias de Python si es necesario
 # Ejemplo:
-# RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Establece el directorio de trabajo en el contenedor
 WORKDIR /app
