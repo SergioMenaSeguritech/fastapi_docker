@@ -1,17 +1,13 @@
-# Usa la imagen base de Raspberry Pi OS
-FROM --platform=linux/arm/v6 raspbian/raspbian:buster
+# Usa la imagen base de Alpine Linux para ARM v6
+FROM arm32v6/alpine:3.14
 
 # Instala Python 3.9 y otras dependencias
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    python3.9 \
-    python3-pip \
-    build-essential \
+RUN apk add --no-cache \
+    python3 \
+    py3-pip \
+    build-base \
     curl \
-    libssl-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-# Configura Python 3.9 como predeterminado
-RUN ln -s /usr/bin/python3.9 /usr/bin/python
+    openssl-dev
 
 # Instala Rust
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
@@ -26,7 +22,7 @@ WORKDIR /app
 COPY . /app
 
 # Instala las dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Expone el puerto en el que se ejecutará la aplicación
 EXPOSE 8000
