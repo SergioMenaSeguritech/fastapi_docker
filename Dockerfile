@@ -24,7 +24,7 @@ ENV PATH="/rust-1.69.0-arm-unknown-linux-gnueabihf/cargo/bin:${PATH}"
 WORKDIR /app
 
 # Copia los archivos de la aplicación al contenedor
-COPY . /app
+COPY . /app/
 
 # Instala las dependencias de Python
 RUN pip3 install --no-cache-dir -r requirements.txt
@@ -33,4 +33,4 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 # Comando para iniciar la aplicación FastAPI
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "main.py"]
