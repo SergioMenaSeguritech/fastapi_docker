@@ -33,4 +33,4 @@ RUN pip3 install --no-cache-dir -r requirements.txt
 EXPOSE 8000
 
 # Comando para iniciar la aplicación FastAPI
-CMD ["python", "main.py"]
+CMD ["python3", "main.py"]
